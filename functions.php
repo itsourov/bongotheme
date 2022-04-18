@@ -101,6 +101,7 @@ function wpb_get_post_views($postID){
 
 include('inc/functions/nav-walker.php');
 include('inc/functions/plugin-checker.php');
+include('inc/functions/widgets.php');
 
 
 
@@ -124,7 +125,6 @@ function get_breadcrumb() {
         echo '</em>"';
     }
 }
-
 
 
 

@@ -22,6 +22,13 @@ function my_theme_register_required_plugins() {
             'force_activation'   => false, 
 			
 		),
+        array(
+			'name'        => 'Classic widgets',
+			'slug'        => 'classic-widgets',
+            'required' => false,
+            'force_activation'   => false, 
+			
+		),
 		array(
 			'name'        => 'Regenerate Thumbnails',
 			'slug'        => 'regenerate-thumbnails',
