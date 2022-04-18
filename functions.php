@@ -30,7 +30,7 @@ function bongotheme_register_style()
 
     wp_enqueue_style('bongotheme', get_template_directory_uri() . '/style.css', array('bootstrap'), $ver, 'all');
    wp_enqueue_style('fontawesome', 'https://use.fontawesome.com/releases/v5.13.0/css/all.css', array('bootstrap'), $ver, 'all');
-    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', array(), '1.0', 'all');
+    wp_enqueue_style('bootstrap', get_template_directory_uri() . '/assets/bootstrap/bootstrap.min.css', array(), '1.0', 'all');
     wp_enqueue_style('ripple', get_template_directory_uri() . '/assets/ripple/ripple.css', array(), '1.0', 'all');
 
 }
@@ -39,7 +39,7 @@ add_action('wp_enqueue_scripts', 'bongotheme_register_style');
 function bongotheme_register_scripts()
 {
     $ver = rand();
-    wp_enqueue_script('popper', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', array(), '1.0', $in_footer = true);
+    wp_enqueue_script('popper', get_template_directory_uri() . '/assets/bootstrap/bootstrap.bundle.min.js', array(), '1.0', $in_footer = true);
     wp_enqueue_script('lightbox', 'https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.0/dist/index.bundle.min.js', array('bongotheme'), '1.0', $in_footer = true);
     wp_enqueue_script('bongotheme', get_template_directory_uri() . '/assets/js/index.js', array(), $ver, $in_footer = true);
    // wp_enqueue_script('fontawesome',get_template_directory_uri() . '/assets/fontawesome-free-6.1.1-web/js/all.min.js', array(), '1.2', $in_footer = false);
