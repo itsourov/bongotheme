@@ -38,27 +38,27 @@
     </div> -->
 
 
-    <div class="posts-card shadow-sm text-center p-3 mt-3">
+    <!-- <div class="posts-card shadow-sm text-center p-3 mt-3">
         <h5>আমাদেরকে ফলো করুন</h5>
         <div class="follow-btns">
-            <!-- Facebook -->
+      
             <a effect="ripple" class="btn btn-primary  shadow-none" style="background-color: #3b5998;" href="#!"
                 role="button"><i class="fab fa-facebook-f"></i></a>
 
-            <!-- Instagram -->
+     
             <a effect="ripple" class="btn btn-primary  shadow-none" style="background-color: #ac2bac;" href="#!"
                 role="button"><i class="fab fa-instagram"></i></a>
 
-            <!-- Youtube -->
+         
             <a effect="ripple" class="btn btn-primary  shadow-none" style="background-color: #ed302f;" href="#!"
                 role="button"><i class="fab fa-youtube"></i></a>
 
 
-            <!-- Whatsapp -->
+           
             <a effect="ripple" class="btn btn-primary  shadow-none" style="background-color: #25d366;" href="#!"
                 role="button"><i class="fab fa-whatsapp"></i></a>
         </div>
 
-    </div>
+    </div> -->
 
 </div>

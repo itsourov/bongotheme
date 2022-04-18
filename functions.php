@@ -30,7 +30,7 @@ function bongotheme_register_style()
 
     wp_enqueue_style('bongotheme', get_template_directory_uri() . '/style.css', array('bootstrap'), $ver, 'all');
    wp_enqueue_style('fontawesome', 'https://use.fontawesome.com/releases/v5.13.0/css/all.css', array('bootstrap'), $ver, 'all');
-    wp_enqueue_style('bootstrap', get_template_directory_uri() . '/assets/bootstrap/css/bootstrap.min.css', array(), '1.0', 'all');
+    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', array(), '1.0', 'all');
     wp_enqueue_style('ripple', get_template_directory_uri() . '/assets/ripple/ripple.css', array(), '1.0', 'all');
 
 }
@@ -39,7 +39,7 @@ add_action('wp_enqueue_scripts', 'bongotheme_register_style');
 function bongotheme_register_scripts()
 {
     $ver = rand();
-    wp_enqueue_script('popper', get_template_directory_uri() . '/assets/bootstrap/js/bootstrap.bundle.min.js', array(), '1.0', $in_footer = true);
+    wp_enqueue_script('popper', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', array(), '1.0', $in_footer = true);
     wp_enqueue_script('lightbox', 'https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.0/dist/index.bundle.min.js', array('bongotheme'), '1.0', $in_footer = true);
     wp_enqueue_script('bongotheme', get_template_directory_uri() . '/assets/js/index.js', array(), $ver, $in_footer = true);
    // wp_enqueue_script('fontawesome',get_template_directory_uri() . '/assets/fontawesome-free-6.1.1-web/js/all.min.js', array(), '1.2', $in_footer = false);
@@ -54,7 +54,7 @@ function bongotheme_getLogo()
     $image = wp_get_attachment_image_src($logo, 'full');
 
     if ($image == "") {
-        $image_url = "https://nagadtips.com/wp-content/uploads/2021/08/nagadtips-min.png";
+        $image_url =  get_template_directory_uri().'/assets/images/logo.jpg';
     } else {
         $image_url = $image[0];
     }
@@ -134,4 +134,51 @@ function get_breadcrumb() {
 
 
 
+function bootstrap_pagination( \WP_Query $wp_query = null, $echo = true, $params = [] ) {
+    if ( null === $wp_query ) {
+        global $wp_query;
+    }
 
+    $add_args = [];
+
+    //add query (GET) parameters to generated page URLs
+    /*if (isset($_GET[ 'sort' ])) {
+        $add_args[ 'sort' ] = (string)$_GET[ 'sort' ];
+    }*/
+
+    $pages = paginate_links( array_merge( [
+            'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
+            'format'       => '?paged=%#%',
+            'current'      => max( 1, get_query_var( 'paged' ) ),
+            'total'        => $wp_query->max_num_pages,
+            'type'         => 'array',
+            'show_all'     => false,
+            'end_size'     => 3,
+            'mid_size'     => 1,
+            'prev_next'    => true,
+            'prev_text'    => __( '« Prev' ),
+            'next_text'    => __( 'Next »' ),
+            'add_args'     => $add_args,
+            'add_fragment' => ''
+        ], $params )
+    );
+
+    if ( is_array( $pages ) ) {
+        //$current_page = ( get_query_var( 'paged' ) == 0 ) ? 1 : get_query_var( 'paged' );
+        $pagination = '<div class="pagination"><ul class="pagination">';
+
+        foreach ( $pages as $page ) {
+            $pagination .= '<li class="page-item' . (strpos($page, 'current') !== false ? ' active' : '') . '"> ' . str_replace('page-numbers', 'page-link', $page) . '</li>';
+        }
+
+        $pagination .= '</ul></div>';
+
+        if ( $echo ) {
+            echo $pagination;
+        } else {
+            return $pagination;
+        }
+    }
+
+    return null;
+}
