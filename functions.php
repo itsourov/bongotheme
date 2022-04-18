@@ -62,6 +62,12 @@ function bongotheme_getLogo()
 }
 
 
+
+function getPouparPosts($numOfPost){
+    return new WP_Query(array('posts_per_page' => $numOfPost, 'meta_key' => 'wpb_post_views_count', 'orderby' => 'meta_value_num', 'order' => 'DESC'));
+}
+
+
 function wpb_set_post_views($postID) {
     $count_key = 'wpb_post_views_count';
     $count = get_post_meta($postID, $count_key, true);

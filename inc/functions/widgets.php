@@ -4,8 +4,7 @@
  * Register our sidebars and widgetized areas.
  *
  */
-function arphabet_widgets_init()
-{
+function arphabet_widgets_init() {
 
     register_sidebar(array(
         'name' => ' right sidebar',
@@ -17,19 +16,18 @@ function arphabet_widgets_init()
     ));
 
 }
+
 add_action('widgets_init', 'arphabet_widgets_init');
 
 /**
  * Adds Foo_Widget widget.
  */
-class BT_widget_about_box extends WP_Widget
-{
+class BT_widget_about_box extends WP_Widget {
 
     /**
      * Register widget with WordPress.
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct(
             'bt_widget_about_box', // Base ID
             'BongoTheme About box', // Name
@@ -45,8 +43,7 @@ class BT_widget_about_box extends WP_Widget
      * @param array $args     Widget arguments.
      * @param array $instance Saved values from database.
      */
-    public function widget($args, $instance)
-    {
+    public function widget($args, $instance) {
         extract($args);
         $title = apply_filters('widget_title', $instance['title']);
         $about_desc = apply_filters('widget_about_desc', $instance['about_desc']);
@@ -56,6 +53,9 @@ class BT_widget_about_box extends WP_Widget
         if (!empty($title)) {
             echo $before_title . $title . $after_title;
         }
+        ?>
+            <img class='logo' src="<?php echo bongotheme_getLogo(); ?>" alt="">
+        <?php
         if (!empty($about_desc)) {
             echo __('<p>' . $about_desc . '</p>', 'bongotheme');
         }
@@ -78,12 +78,11 @@ class BT_widget_about_box extends WP_Widget
      *
      * @param array $instance Previously saved values from database.
      */
-    public function form($instance)
-    {
+    public function form($instance) {
         if (isset($instance['title'])) {
             $title = $instance['title'];
         } else {
-            $title = __('New title', 'bongotheme');
+            $title = __('আমাদের সম্পর্কে', 'bongotheme');
         }
 
         if (isset($instance['about_desc'])) {
@@ -128,8 +127,7 @@ class BT_widget_about_box extends WP_Widget
      *
      * @return array Updated safe values to be saved.
      */
-    public function update($new_instance, $old_instance)
-    {
+    public function update($new_instance, $old_instance) {
         $instance = array();
         $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
         $instance['about_desc'] = (!empty($new_instance['about_desc'])) ? strip_tags($new_instance['about_desc']) : '';
@@ -143,8 +141,7 @@ class BT_widget_about_box extends WP_Widget
 // Register Foo_Widget widget
 add_action('widgets_init', 'register_aboutbox_widget');
 
-function register_aboutbox_widget()
-{
+function register_aboutbox_widget() {
     register_widget('BT_widget_about_box');
 }
 
@@ -154,98 +151,134 @@ function register_aboutbox_widget()
 
 
 
+/**
+ * Adds Foo_Widget widget.
+ */
+class BT_widget_popular_posts extends WP_Widget {
 
-// Creating the widget
-class wpb_widget extends WP_Widget
-{
-
-    public function __construct()
-    {
+    /**
+     * Register widget with WordPress.
+     */
+    public function __construct() {
         parent::__construct(
-
-            // Base ID of your widget
-            'wpb_widget',
-
-            // Widget name will appear in UI
-            __('WPBeginner Widget', 'wpb_widget_domain'),
-
-            // Widget description
-            array('description' => __('Sample widget based on WPBeginner Tutorial', 'wpb_widget_domain'))
+            'bt_widget_popular_posts', // Base ID
+            'BongoTheme Popular Posts', // Name
+            array('description' => __('BongoTheme Popular Posts', 'bongotheme')) // Args
         );
     }
 
-    // Creating widget front-end
-
-    public function widget($args, $instance)
-    {
+    /**
+     * Front-end display of widget.
+     *
+     * @see WP_Widget::widget()
+     *
+     * @param array $args     Widget arguments.
+     * @param array $instance Saved values from database.
+     */
+    public function widget($args, $instance) {
+        extract($args);
         $title = apply_filters('widget_title', $instance['title']);
+        $numOfPosts = apply_filters('widget_numOfPosts', $instance['numOfPosts']);
+       
 
-        // before and after widget arguments are defined by themes
-        echo $args['before_widget']. '<div id="most-viewed-posts">';
+        echo $before_widget . '<div id="most-viewed-posts">';
         if (!empty($title)) {
-            echo $args['before_title'] . $title . $args['after_title'];
+            echo $before_title . $title . $after_title;
         }
-
-        // This is where you run the code and display the output
-
+        if (empty($numOfPosts)) {
+            $numOfPosts = 4;
+        }
         ?>
-<ul>
-
-    <?php
-$popularpost = new WP_Query(array('posts_per_page' => 4, 'meta_key' => 'wpb_post_views_count', 'orderby' => 'meta_value_num', 'order' => 'DESC'));
-
-        while ($popularpost->have_posts()) {
-            $popularpost->the_post();
-
-            ?>
-
-    <li effect="ripple"><a href="<?php the_permalink();?>"><?php the_title();?></a></li>
-
-    <?php
-}
-        ?>
-
-</ul>
-
-<?php
-//    echo __( 'Hello, World!', 'wpb_widget_domain' );
-        echo $args['after_widget'].'</div>';
+        <ul>
+        
+            <?php
+        $popularpost = getPouparPosts($numOfPosts);
+        
+                while ($popularpost->have_posts()) {
+                    $popularpost->the_post();
+        
+                    ?>
+        
+            <li effect="ripple"><a href="<?php the_permalink();?>"><?php the_title();?></a></li>
+        
+            <?php
+        }
+                ?>
+        
+        </ul>
+        
+        <?php
+        echo '</div>' . $after_widget;
     }
 
-    // Widget Backend
-    public function form($instance)
-    {
+    /**
+     * Back-end widget form.
+     *
+     * @see WP_Widget::form()
+     *
+     * @param array $instance Previously saved values from database.
+     */
+    public function form($instance) {
         if (isset($instance['title'])) {
             $title = $instance['title'];
         } else {
-            $title = __('New title', 'wpb_widget_domain');
+            $title = __('জনপ্রিয় পোস্টসমূহ', 'bongotheme');
         }
-        // Widget admin form
-         ?>
+
+    
+
+        if (isset($instance['numOfPosts'])) {
+            $numOfPosts = $instance['numOfPosts'];
+        } else {
+            $numOfPosts = __('3', 'bongotheme');
+        }
+        ?>
 <p>
-    <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:');?></label>
+    <label for="<?php echo $this->get_field_name('title'); ?>"><?php _e('Title:');?></label>
     <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>"
         name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 </p>
+<p>
+    <label for="<?php echo $this->get_field_name('numOfPosts'); ?>"><?php _e('numOfPosts:');?></label>
+    <input class="widefat" id="<?php echo $this->get_field_id('numOfPosts'); ?>"
+        name="<?php echo $this->get_field_name('numOfPosts'); ?>" type="number"
+        value="<?php echo esc_attr($numOfPosts); ?>" />
+</p>
+
 <?php
 }
 
-    // Updating widget replacing old instances with new
-    public function update($new_instance, $old_instance)
-    {
+    /**
+     * Sanitize widget form values as they are saved.
+     *
+     * @see WP_Widget::update()
+     *
+     * @param array $new_instance Values just sent to be saved.
+     * @param array $old_instance Previously saved values from database.
+     *
+     * @return array Updated safe values to be saved.
+     */
+    public function update($new_instance, $old_instance) {
         $instance = array();
         $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
+        $instance['numOfPosts'] = (!empty($new_instance['numOfPosts'])) ? strip_tags($new_instance['numOfPosts']) : '';
+      
         return $instance;
     }
 
-    // Class wpb_widget ends here
+} // class Foo_Widget
+
+// Register Foo_Widget widget
+add_action('widgets_init', 'register_numOfPosts');
+
+function register_numOfPosts() {
+    register_widget('BT_widget_popular_posts');
 }
 
-// Register and load the widget
-function wpb_load_widget()
-{
-    register_widget('wpb_widget');
-}
-add_action('widgets_init', 'wpb_load_widget');
+
+
+
+
+
 
 ?>
